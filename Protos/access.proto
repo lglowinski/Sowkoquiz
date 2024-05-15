@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sowkoquiz.Grpc";
+
+package access;
+
+service AccessService {
+  rpc AcquireAccessKey (AcquireAccessKeyMessage) returns (AcquireAccessKeyResponse);
+}
+
+message AcquireAccessKeyMessage{
+  
+}
+
+message AcquireAccessKeyResponse{
+  string accessKey = 1;
+}

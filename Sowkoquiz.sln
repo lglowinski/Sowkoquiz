@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Client", "Sowkoquiz.Client\Sowkoquiz.Client.csproj", "{7FA348B9-8CB9-42BA-963E-D9FC44158681}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{9B1AC54A-F216-4564-BD92-49C6AE1E856B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Domain", "Sowkoquiz.Domain\Sowkoquiz.Domain.csproj", "{83E60DF5-ACA8-43DF-9174-080DA8BF6D61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Application", "Sowkoquiz.Application\Sowkoquiz.Application.csproj", "{5F36B55F-425F-48FB-AB57-8F96F903903A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Grpc", "Sowkoquiz.Grpc\Sowkoquiz.Grpc.csproj", "{8A2FA249-1247-4E78-AE50-B5252BD76AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Infrastructure", "Sowkoquiz.Infrastructure\Sowkoquiz.Infrastructure.csproj", "{E6DD4400-6770-4BF8-B906-9950354915C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Common", "Sowkoquiz.Common\Sowkoquiz.Common.csproj", "{7EC321C2-662D-4D26-B474-89608DD0F7B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Migration", "Sowkoquiz.Migration\Sowkoquiz.Migration.csproj", "{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FA348B9-8CB9-42BA-963E-D9FC44158681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FA348B9-8CB9-42BA-963E-D9FC44158681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FA348B9-8CB9-42BA-963E-D9FC44158681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FA348B9-8CB9-42BA-963E-D9FC44158681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F36B55F-425F-48FB-AB57-8F96F903903A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F36B55F-425F-48FB-AB57-8F96F903903A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F36B55F-425F-48FB-AB57-8F96F903903A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F36B55F-425F-48FB-AB57-8F96F903903A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2FA249-1247-4E78-AE50-B5252BD76AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2FA249-1247-4E78-AE50-B5252BD76AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2FA249-1247-4E78-AE50-B5252BD76AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2FA249-1247-4E78-AE50-B5252BD76AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6DD4400-6770-4BF8-B906-9950354915C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6DD4400-6770-4BF8-B906-9950354915C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6DD4400-6770-4BF8-B906-9950354915C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6DD4400-6770-4BF8-B906-9950354915C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC321C2-662D-4D26-B474-89608DD0F7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC321C2-662D-4D26-B474-89608DD0F7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC321C2-662D-4D26-B474-89608DD0F7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC321C2-662D-4D26-B474-89608DD0F7B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61} = {9B1AC54A-F216-4564-BD92-49C6AE1E856B}
+		{5F36B55F-425F-48FB-AB57-8F96F903903A} = {9B1AC54A-F216-4564-BD92-49C6AE1E856B}
+		{8A2FA249-1247-4E78-AE50-B5252BD76AED} = {9B1AC54A-F216-4564-BD92-49C6AE1E856B}
+		{E6DD4400-6770-4BF8-B906-9950354915C6} = {9B1AC54A-F216-4564-BD92-49C6AE1E856B}
+	EndGlobalSection
+EndGlobal

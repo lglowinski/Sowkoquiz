@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option csharp_namespace = "Sowkoquiz.Grpc";
+
+package quiz;
+
+service QuizService {
+  rpc StartQuiz (StartQuizRequest) returns (StartQuizResponse);
+  rpc AnswerQuestion (AnswerQuestionRequest) returns (AnswerQuestionResponse);
+  rpc ResumeQuiz (ResumeQuizRequest) returns (ResumeQuizResponse);
+}
+
+message StartQuizRequest {
+  int32 id = 1;
+  string accessKey = 2;
+}
+
+message StartQuizResponse {
+  int32 id = 1;
+  Question question = 2;
+}
+
+message AnswerQuestionRequest {
+  int32 quizId = 1;
+  int32 questionId = 2;
+  string letter = 3;
+  string accessKey = 4;
+}
+
+message AnswerQuestionResponse {
+  oneof response{
+    Question nextQuestion = 1;
+    Score score = 3;
+  }
+}
+
+message ResumeQuizRequest {
+  int32 id = 1;
+  string accessKey = 2;
+}
+
+message ResumeQuizResponse {
+  int32 id = 1;
+  Question question = 2;
+}
+
+message Question{
+  int32 id = 1;
+  string text = 2;
+  repeated Answer answers = 3;
+
+  message Answer{
+    string letter = 1;
+    string text = 2;
+  }
+}
+
+message Score{
+  int32 correct = 1;
+  int32 total = 2;
+}

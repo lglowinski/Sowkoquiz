@@ -1,0 +1,109 @@
+[
+  {
+    "Title": "General Knowledge Quiz",
+    "Description": "A quiz to test your general knowledge across various subjects.",
+    "QuizzSize": 5,
+    "QuestionPool": [
+      {
+        "Text": "What is the capital of France?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Paris",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "Lyon",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "Nice",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "Who wrote 'Hamlet'?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "William Shakespeare",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "Charles Dickens",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "Jane Austen",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What is the chemical symbol for water?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "H2O",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "HO2",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "H2",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What year did the Titanic sink?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "1912",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "1905",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "1898",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What planet is known as the Red Planet?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Mars",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "Venus",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "Jupiter",
+            "IsCorrect": false
+          }
+        ]
+      }
+    ]
+  }
+]

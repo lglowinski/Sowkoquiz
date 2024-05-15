@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Sowkoquiz.Grpc</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Protobuf Include="..\Protos\quiz.proto" GrpcServices="Server" />
+        <Protobuf Include="..\Protos\search.proto" GrpcServices="Server" />
+        <Protobuf Include="..\Protos\access.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.57.0"/>
+        <PackageReference Include="Grpc.AspNetCore.Web" Version="2.62.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Sowkoquiz.Application\Sowkoquiz.Application.csproj" />
+      <ProjectReference Include="..\Sowkoquiz.Common\Sowkoquiz.Common.csproj" />
+      <ProjectReference Include="..\Sowkoquiz.Infrastructure\Sowkoquiz.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

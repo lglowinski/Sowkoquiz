@@ -1,0 +1,27 @@
+﻿@page "/"
+@inject Grpc.SearchService.SearchServiceClient SearchService
+@using Sowkoquiz.Constants
+@using Sowkoquiz.Grpc
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject AccessService.AccessServiceClient AccessServiceClient
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var key = await LocalStorage.GetItemAsync<string>(LocalStorageKeys.AccessKey);
+
+        if (string.IsNullOrEmpty(key))
+        {
+            key = (await AccessServiceClient.AcquireAccessKeyAsync(new AcquireAccessKeyMessage())).AccessKey;
+            await LocalStorage.SetItemAsStringAsync(LocalStorageKeys.AccessKey, key);
+        }
+        
+        await base.OnInitializedAsync();
+    }
+}

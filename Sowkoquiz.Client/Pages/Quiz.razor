@@ -1,0 +1,147 @@
+@page "/quiz/{Id:int}"
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject QuizService.QuizServiceClient QuizServiceClient
+@using System.Diagnostics.CodeAnalysis
+@using Sowkoquiz.Constants
+@using Sowkoquiz.Grpc
+
+
+@if (_displayResult)
+{
+    <PageTitle>Quiz</PageTitle>
+    <div class="container mt-4 text-center">
+        <h3 class="mb-3">Quiz finished!</h3>
+        <p>Correct answers: @_score.Correct</p>
+        <p>Your score: @_score.Correct / @_score.Total</p>
+    </div>
+}
+else if(_currentQuestion == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    if (!isSubmitting)
+    {
+        <div class="container mt-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <form method="post" class="mb-3" @onsubmit="HandleValidSubmit">
+                        <fieldset>
+                            <legend class="mb-3">Current Question</legend>
+                            <h4 class="card-title">@_currentQuestion.Text</h4>
+                            <div class="list-group">
+                                <InputRadioGroup @bind-Value="Model.Letter">
+                                    @foreach (var answer in _currentQuestion!.Answers)
+                                    {
+                                        <div class="form-check">
+                                            <InputRadio class="form-check-input" Value="@answer.Letter"/>
+                                            <label class="form-check-label">
+                                                @answer.Text
+                                            </label>
+                                        </div>
+                                    }
+                                </InputRadioGroup>
+                            </div>
+                            <button type="submit" disabled="@BtnDisabled" class="btn btn-primary mt-3">Submit Answer</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container mt-4">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter] 
+    public int Id { get; set; }
+
+    private int _activeQuizId;
+    private string _accessKey = "";
+    private readonly QuestionModel Model = new();
+    private Question? _currentQuestion = null;
+    private bool _displayResult = false;
+    private Score? _score = null;
+    private bool isSubmitting;
+    private bool BtnDisabled => string.IsNullOrWhiteSpace(Model.Letter) || isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _accessKey = await GetAccessKey();
+        var response = (await QuizServiceClient.StartQuizAsync(new StartQuizRequest
+        {
+            Id = Id,
+            AccessKey = _accessKey
+        }));
+        
+        _currentQuestion = response.Question;
+        _activeQuizId = response.Id;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (isSubmitting) return;
+        
+        isSubmitting = true;
+
+        try
+        {
+            Model.QuestionId = _currentQuestion!.Id;
+
+            var response = await QuizServiceClient.AnswerQuestionAsync(new AnswerQuestionRequest
+            {
+                QuizId = _activeQuizId,
+                QuestionId = Model.QuestionId,
+                Letter = Model.Letter,
+                AccessKey = _accessKey
+            });
+
+            Model.Letter = null;
+
+            switch (response.ResponseCase)
+            {
+                case AnswerQuestionResponse.ResponseOneofCase.NextQuestion:
+                    _currentQuestion = response.NextQuestion;
+                    break;
+                case AnswerQuestionResponse.ResponseOneofCase.Score:
+                    _displayResult = true;
+                    _score = response.Score;
+                    break;
+                case AnswerQuestionResponse.ResponseOneofCase.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        finally
+        {
+            isSubmitting = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task<string> GetAccessKey()
+    {
+        var key = await LocalStorage.GetItemAsync<string>(LocalStorageKeys.AccessKey);
+
+        return key;
+    }
+
+
+    private class QuestionModel()
+    {
+        [NotNull] public int QuestionId { get; set; }
+        [NotNull] public string? Letter { get; set; }
+    }
+
+}

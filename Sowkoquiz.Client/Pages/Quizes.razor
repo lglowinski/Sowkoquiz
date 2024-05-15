@@ -1,0 +1,37 @@
+﻿@page "/quizes"
+@using Sowkoquiz.Grpc
+@using Sowkoquiz.Components
+@inject SearchService.SearchServiceClient SearchService
+
+<PageTitle>Quizzes</PageTitle>
+
+<h1>Quizzes</h1>
+
+<p>Below is displayed a list of quizzes</p>
+
+<div style="height:500px;overflow-y:scroll">
+    <Virtualize ItemsProvider="GetItems" Context="quiz">
+        <QuizTile Quiz="@quiz"/>
+    </Virtualize>
+</div>
+
+@code {
+    private List<SearchQuizResponse.Types.Quiz> _quizzes = [];
+
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     _quizzes = (await SearchService.SearchQuizAsync(new SearchQuizRequest())).Quiz.ToList();
+    // }
+
+
+    private async ValueTask<ItemsProviderResult<SearchQuizResponse.Types.Quiz>> GetItems(ItemsProviderRequest request)
+    {
+        var numQuizes = Math.Min(request.Count, _quizzes.Count - request.StartIndex);
+        var nextQuizes = (await SearchService.SearchQuizAsync(new SearchQuizRequest
+            { Take = 12, Skip = numQuizes / 12, SearchTerm = string.Empty })).Quiz;
+
+        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(nextQuizes, _quizzes.Count + nextQuizes.Count);
+    }
+
+}
