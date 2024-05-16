@@ -6,11 +6,11 @@ namespace Sowkoquiz.Application.Search.SearchQuiz;
 public record SearchQuizQuery
     : IRequest<IEnumerable<QuizzDefinition>>
 {
-    public int Take { get; set; }
+    public int Take { get; }
 
-    public int Skip { get; set; }
+    public int Skip { get; }
 
-    public string SearchTerm { get; set; }
+    public string SearchTerm { get; }
 
     public SearchQuizQuery(int? take, int? skip, string? searchTerm)
     {

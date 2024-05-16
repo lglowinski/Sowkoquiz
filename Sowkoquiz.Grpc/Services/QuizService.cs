@@ -2,6 +2,7 @@ using ErrorOr;
 using Grpc.Core;
 using MediatR;
 using Sowkoquiz.Application.Quiz.AnswerQuestion;
+using Sowkoquiz.Application.Quiz.RandomQuiz;
 using Sowkoquiz.Application.Quiz.StartQuiz;
 using Sowkoquiz.Grpc.Mappers;
 
@@ -52,7 +53,17 @@ public class QuizService(ISender sender) : Grpc.QuizService.QuizServiceBase
             }
         };
     }
+    
+    public override async Task<RandomQuizResponse> RandomQuiz(RandomQuizRequest request, ServerCallContext context)
+    {
+        var result = await sender.Send(new RandomQuizQuery(), context.CancellationToken);
 
+        return new RandomQuizResponse
+        {
+            Id = result
+        };
+    }
+    
     private static void SetContextError(Error error, ref ServerCallContext context)
     {
         context.ResponseTrailers.Add(error.Code, error.Description);

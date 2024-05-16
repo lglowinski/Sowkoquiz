@@ -19,17 +19,3 @@
         transform: rotate(360deg)
     }
 }
-
- .card {
-     background-color: #f8f9fa;
-     border: 1px solid rgba(0,0,0,.125);
-     border-radius: 0.25rem;
- }
-
-.form-check-input {
-    margin-right: 0.5rem;
-}
-
-.form-check-label {
-    font-size: 1.1em;
-}

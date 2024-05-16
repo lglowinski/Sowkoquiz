@@ -1,0 +1,20 @@
+@page "/random"
+@using Sowkoquiz.Grpc
+@inject QuizService.QuizServiceClient QuizServiceClient
+
+<div class="flex justify-center items-center mt-8">
+    <div class="loader"></div>
+</div>
+
+@code {
+    [Inject] 
+    public NavigationManager NavigationManager { get; set; } = null!;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var quizId = await QuizServiceClient.RandomQuizAsync(new RandomQuizRequest());
+        
+        NavigationManager.NavigateTo($"/quiz/{quizId}");
+    }
+
+}

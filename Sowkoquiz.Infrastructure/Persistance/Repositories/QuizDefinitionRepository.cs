@@ -29,4 +29,11 @@ public class QuizDefinitionRepository(SowkoquizDbContext dbContext) : IQuizDefin
 
         return await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
     }
+
+    public Task<int> GetCountAsync(CancellationToken cancellationToken)
+    {
+        var count = dbContext.QuizzDefinitions.Count();
+        
+        return Task.FromResult(count);
+    }
 }

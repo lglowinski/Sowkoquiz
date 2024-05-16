@@ -9,62 +9,57 @@
 @if (_displayResult)
 {
     <PageTitle>Quiz</PageTitle>
-    <div class="container mt-4 text-center">
-        <h3 class="mb-3">Quiz finished!</h3>
-        <p>Correct answers: @_score.Correct</p>
-        <p>Your score: @_score.Correct / @_score.Total</p>
+    <div class="container mx-auto mt-8 p-4 text-center bg-white shadow rounded">
+        <h3 class="text-2xl font-bold mb-4">Quiz finished!</h3>
+        <p class="text-lg mb-2">Correct answers: @_score.Correct</p>
+        <p class="text-lg">Your score: @_score.Correct / @_score.Total</p>
     </div>
 }
-else if(_currentQuestion == null)
+else if (_currentQuestion == null)
 {
-    <div class="spinner"></div>
+    <div class="flex justify-center items-center mt-8">
+        <div class="loader"></div>
+    </div>
 }
 else
 {
     if (!isSubmitting)
     {
-        <div class="container mt-4">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <form method="post" class="mb-3" @onsubmit="HandleValidSubmit">
-                        <fieldset>
-                            <legend class="mb-3">Current Question</legend>
-                            <h4 class="card-title">@_currentQuestion.Text</h4>
-                            <div class="list-group">
-                                <InputRadioGroup @bind-Value="Model.Letter">
-                                    @foreach (var answer in _currentQuestion!.Answers)
-                                    {
-                                        <div class="form-check">
-                                            <InputRadio class="form-check-input" Value="@answer.Letter"/>
-                                            <label class="form-check-label">
-                                                @answer.Text
-                                            </label>
-                                        </div>
-                                    }
-                                </InputRadioGroup>
-                            </div>
-                            <button type="submit" disabled="@BtnDisabled" class="btn btn-primary mt-3">Submit Answer</button>
-                        </fieldset>
-                    </form>
-                </div>
+        <div class="container mx-auto mt-8 p-4">
+            <div class="bg-white p-6 rounded shadow-md">
+                <form method="post" @onsubmit="HandleValidSubmit">
+                    <fieldset class="space-y-4">
+                        <legend class="text-2xl font-semibold">Question @_questionCount</legend>
+                        <h4 class="text-xl font-semibold">@_currentQuestion.Text</h4>
+                        <div class="space-y-2">
+                            <InputRadioGroup @bind-Value="Model.Letter" class="accent-gray-700">
+                                @foreach (var answer in _answers)
+                                {
+                                    <div class="form-check">
+                                        <InputRadio class="checked:bg-gray-500 text-gray-600 border-gray-300 focus:ring-gray-500 accent-gray-700" Value="@answer.Letter"/>
+                                        <label class="form-check-label text-lg">
+                                            @answer.Text
+                                        </label>
+                                    </div>
+                                }
+                            </InputRadioGroup>
+                        </div>
+                        <button type="submit" disabled="@BtnDisabled" class="mt-4 p-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600">Submit Answer</button>
+                    </fieldset>
+                </form>
             </div>
         </div>
     }
     else
     {
-        <div class="container mt-4">
-            <div class="card shadow-lg">
-                <div class="card-body">
-                    <div class="spinner"></div>
-                </div>
-            </div>
+        <div class="flex justify-center items-center mt-8">
+            <div class="loader"></div>
         </div>
     }
 }
 
 @code {
-    [Parameter] 
-    public int Id { get; set; }
+    [Parameter] public int Id { get; set; }
 
     private int _activeQuizId;
     private string _accessKey = "";
@@ -74,6 +69,8 @@ else
     private Score? _score = null;
     private bool isSubmitting;
     private bool BtnDisabled => string.IsNullOrWhiteSpace(Model.Letter) || isSubmitting;
+    private List<Question.Types.Answer> _answers = [];
+    private int _questionCount = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,13 +82,14 @@ else
         }));
         
         _currentQuestion = response.Question;
+        _answers = _currentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
         _activeQuizId = response.Id;
     }
 
     private async Task HandleValidSubmit()
     {
         if (isSubmitting) return;
-        
+
         isSubmitting = true;
 
         try
@@ -112,6 +110,8 @@ else
             {
                 case AnswerQuestionResponse.ResponseOneofCase.NextQuestion:
                     _currentQuestion = response.NextQuestion;
+                    _answers = _currentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
+                    _questionCount++;
                     break;
                 case AnswerQuestionResponse.ResponseOneofCase.Score:
                     _displayResult = true;

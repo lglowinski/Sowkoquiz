@@ -28,9 +28,29 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(ActiveQuiz quiz, CancellationToken cancellationToken)
+    public async Task UpdateAsync(ActiveQuiz quiz, CancellationToken cancellationToken = default)
     {
         dbContext.ActiveQuizzes.Update(quiz);
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<ActiveQuiz>> SearchAsync(string accessKey, string searchTerm = "", int take = 12, int skip = 0,
+        CancellationToken cancellationToken = default)
+    {
+        var quizzes = dbContext
+            .ActiveQuizzes
+            .Where(quiz => quiz.AccessKey == accessKey)
+            .Include(quiz => quiz.Definition)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            quizzes = quizzes
+                .Where(quiz =>
+                    EF.Functions.Like(quiz.Definition.Title, $"%{searchTerm}%")
+                    || EF.Functions.Like(quiz.Definition.Description, $"%{searchTerm}%"));
+        }
+
+        return await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
     }
 }

@@ -1,22 +1,21 @@
 @using Sowkoquiz.Grpc
 
-<div class="card quiz-tile">
-    <div class="card-body">
-        <h5 class="card-title">@Quiz.Title</h5>
-        <p class="card-text">@Quiz.Description</p>
-        <button class="btn btn-primary" @onclick="StartQuiz">Start</button>
-    </div>
+<div class="p-4 border rounded-lg shadow-md bg-gray-100">
+    <h2 class="text-xl font-semibold">@Quiz.Title</h2>
+    <p class="text-gray-600">@Quiz.Description</p>
+    <button class="mt-4 p-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600" @onclick="StartQuiz">Start</button>
 </div>
 
 @code {
-    [Parameter]
+    [Parameter] 
     public SearchQuizResponse.Types.Quiz Quiz { get; set; }
+
+    [Inject] 
+    public NavigationManager NavigationManager { get; set; } = null!;
     
     private void StartQuiz()
     {
         var quizId = Quiz.Id;
         NavigationManager.NavigateTo($"/quiz/{quizId}");
     }
-
-    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 }

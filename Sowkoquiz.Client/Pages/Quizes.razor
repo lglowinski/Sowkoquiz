@@ -5,33 +5,43 @@
 
 <PageTitle>Quizzes</PageTitle>
 
-<h1>Quizzes</h1>
+<div class="container mx-auto p-4">
+    <div class="flex justify-center mb-6">
+        <input type="text" @bind="_searchTerm" placeholder="Type to search..." class="w-full max-w-lg p-2 border border-gray-300 rounded-l-md" />
+        <button @onclick="OnSearch" class="p-2 bg-blue-500 text-white rounded-r-md">Search</button>
+    </div>
 
-<p>Below is displayed a list of quizzes</p>
-
-<div style="height:500px;overflow-y:scroll">
-    <Virtualize ItemsProvider="GetItems" Context="quiz">
-        <QuizTile Quiz="@quiz"/>
-    </Virtualize>
+    <div class="quiz-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        <Virtualize ItemsProvider="GetItems" Context="quiz"  @ref="_virtualizeComponent">
+            <QuizTile Quiz="@quiz" />
+        </Virtualize>
+    </div>
 </div>
 
 @code {
-    private List<SearchQuizResponse.Types.Quiz> _quizzes = [];
-
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     _quizzes = (await SearchService.SearchQuizAsync(new SearchQuizRequest())).Quiz.ToList();
-    // }
-
+    private int _totalCount = 0;
+    private string _searchTerm = string.Empty;
+    private Virtualize<SearchQuizResponse.Types.Quiz> _virtualizeComponent;
 
     private async ValueTask<ItemsProviderResult<SearchQuizResponse.Types.Quiz>> GetItems(ItemsProviderRequest request)
     {
-        var numQuizes = Math.Min(request.Count, _quizzes.Count - request.StartIndex);
+        var numQuizes = Math.Min(request.Count, _totalCount - request.StartIndex);
         var nextQuizes = (await SearchService.SearchQuizAsync(new SearchQuizRequest
-            { Take = 12, Skip = numQuizes / 12, SearchTerm = string.Empty })).Quiz;
+        {
+            Take = 3, 
+            Skip = numQuizes / 3, 
+            SearchTerm = _searchTerm
+        })).Quiz;
+        
+        _totalCount += nextQuizes.Count;
 
-        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(nextQuizes, _quizzes.Count + nextQuizes.Count);
+        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(nextQuizes, _totalCount);
+    }
+
+    private async Task OnSearch()
+    {
+        _totalCount = 0;
+        await _virtualizeComponent.RefreshDataAsync();
     }
 
 }

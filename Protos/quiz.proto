@@ -8,6 +8,7 @@ service QuizService {
   rpc StartQuiz (StartQuizRequest) returns (StartQuizResponse);
   rpc AnswerQuestion (AnswerQuestionRequest) returns (AnswerQuestionResponse);
   rpc ResumeQuiz (ResumeQuizRequest) returns (ResumeQuizResponse);
+  rpc RandomQuiz (RandomQuizRequest) returns (RandomQuizResponse);
 }
 
 message StartQuizRequest {
@@ -42,6 +43,13 @@ message ResumeQuizRequest {
 message ResumeQuizResponse {
   int32 id = 1;
   Question question = 2;
+}
+
+message RandomQuizRequest{
+}
+
+message RandomQuizResponse{
+  int32 id = 1;
 }
 
 message Question{

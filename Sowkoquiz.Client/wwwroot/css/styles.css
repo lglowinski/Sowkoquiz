@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav-scrollable {
+    overflow-y: auto;
+    height: calc(100vh - 3.5rem); /* Subtract the height of the top row */
+}
+
+/* Additional custom styles for your design */
+.bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+.bg-gray-50 {
+    background-color: #f9fafb;
+}
+
+.hover:bg-gray-200:hover {
+    background-color: #edf2f7;
+}
+
+.text-gray-800 {
+    color: #2d3748;
+}
+
+.text-gray-600 {
+    color: #718096;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+@media (min-width: 768px) {
+    .page {
+        flex-direction: row;
+    }
+}
+
+.active {
+    background-color: #EDF0F2;
+}
