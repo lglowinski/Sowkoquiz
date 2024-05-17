@@ -26,16 +26,16 @@
     private async ValueTask<ItemsProviderResult<SearchQuizResponse.Types.Quiz>> GetItems(ItemsProviderRequest request)
     {
         var numQuizes = Math.Min(request.Count, _totalCount - request.StartIndex);
-        var nextQuizes = (await SearchService.SearchQuizAsync(new SearchQuizRequest
+        var response = await SearchService.SearchQuizAsync(new SearchQuizRequest
         {
             Take = 3, 
-            Skip = numQuizes / 3, 
+            Skip = numQuizes, 
             SearchTerm = _searchTerm
-        })).Quiz;
-        
-        _totalCount += nextQuizes.Count;
+        });
 
-        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(nextQuizes, _totalCount);
+        _totalCount = response.Total;
+
+        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(response.Quiz, _totalCount);
     }
 
     private async Task OnSearch()

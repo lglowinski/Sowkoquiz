@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Sowkoquiz.Domain.ActiveQuizEntity;
 
 namespace Sowkoquiz.Application.Common;
@@ -9,6 +10,7 @@ public interface IActiveQuizRepository
     public Task RefreshQuizAsync(int id, DateTime dateTime, CancellationToken cancellationToken = default);
     public Task UpdateAsync(ActiveQuiz quiz, CancellationToken cancellationToken = default);
 
-    public Task<IEnumerable<ActiveQuiz>> SearchAsync(string accessKey, string searchTerm = "", int take = 12,
+    public Task<(IEnumerable<ActiveQuiz> Quizzes, int TotalCount)> SearchAsync(string accessKey,
+        Expression<Func<ActiveQuiz,object>>? orderByPredicate, string searchTerm = "", int take = 12,
         int skip = 0, CancellationToken cancellationToken = default);
 }

@@ -1,13 +1,17 @@
 using MediatR;
 using Sowkoquiz.Application.Common;
-using Sowkoquiz.Domain.ActiveQuizEntity;
 
 namespace Sowkoquiz.Application.Search.UserHistory;
 
-public class GetUserHistoryQueryHandler(IActiveQuizRepository activeQuizRepository) : IRequestHandler<GetUserHistoryQuery, IEnumerable<ActiveQuiz>>
+public class GetUserHistoryQueryHandler(IActiveQuizRepository activeQuizRepository)
+    : IRequestHandler<GetUserHistoryQuery, GetUserHistoryQueryResponse>
 {
-    public async Task<IEnumerable<ActiveQuiz>> Handle(GetUserHistoryQuery query, CancellationToken cancellationToken)
+    public async Task<GetUserHistoryQueryResponse> Handle(GetUserHistoryQuery query, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var activeQuizzes = await activeQuizRepository.SearchAsync(query.AccessKey, 
+            a => a.EndTime, query.SearchTerm, take: query.Take,
+            skip: query.Skip, cancellationToken: cancellationToken);
+
+        return new GetUserHistoryQueryResponse(activeQuizzes.Quizzes, activeQuizzes.TotalCount);
     }
 }

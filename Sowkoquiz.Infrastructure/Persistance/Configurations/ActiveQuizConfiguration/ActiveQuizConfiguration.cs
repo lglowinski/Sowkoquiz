@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sowkoquiz.Domain.ActiveQuizEntity;
 
 namespace Sowkoquiz.Infrastructure.Persistance.Configurations.ActiveQuizConfiguration;
@@ -9,9 +10,13 @@ public class ActiveQuizConfiguration : IEntityTypeConfiguration<ActiveQuiz>
     public void Configure(EntityTypeBuilder<ActiveQuiz> builder)
     {
         builder.Property(q => q.Id).ValueGeneratedOnAdd();
-
+        builder.Property(q => q.EndTime).HasConversion(new DateTimeOffsetToBinaryConverter());
+        
         builder.HasKey(q => q.Id);
+        builder.HasIndex(q => q.EndTime);
 
+        builder.HasQueryFilter(q => q.Status != QuizStatus.Deleted);
+        
         builder.OwnsOne(quiz => quiz.Progress, progress =>
         {
             progress.Property(p => p.Answered).HasColumnName("Answered");

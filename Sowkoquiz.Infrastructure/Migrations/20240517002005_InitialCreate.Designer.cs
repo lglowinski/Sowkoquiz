@@ -11,7 +11,7 @@ using Sowkoquiz.Infrastructure.Persistance;
 namespace Sowkoquiz.Infrastructure.Migrations
 {
     [DbContext(typeof(SowkoquizDbContext))]
-    [Migration("20240515132809_InitialCreate")]
+    [Migration("20240517002005_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,12 +37,17 @@ namespace Sowkoquiz.Infrastructure.Migrations
                     b.Property<int>("DefinitionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("EndTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DefinitionId");
+
+                    b.HasIndex("EndTime");
 
                     b.ToTable("ActiveQuizzes");
                 });

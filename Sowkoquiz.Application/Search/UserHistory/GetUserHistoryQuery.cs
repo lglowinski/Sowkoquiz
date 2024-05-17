@@ -3,7 +3,7 @@ using Sowkoquiz.Domain.ActiveQuizEntity;
 
 namespace Sowkoquiz.Application.Search.UserHistory;
 
-public record GetUserHistoryQuery : IRequest<IEnumerable<ActiveQuiz>>
+public record GetUserHistoryQuery : IRequest<GetUserHistoryQueryResponse>
 {
     public string AccessKey { get; }
     public int Take { get; }

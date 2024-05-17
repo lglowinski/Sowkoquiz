@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Sowkoquiz.Application;
 using Sowkoquiz.Domain.ActiveQuizEntity;
 using Sowkoquiz.Domain.Common;
 using Sowkoquiz.Domain.QuestionEntity;
@@ -8,7 +9,7 @@ using Sowkoquiz.Infrastructure.DomainEvents;
 
 namespace Sowkoquiz.Infrastructure.Persistance;
 
-public class SowkoquizDbContext(DbContextOptions<SowkoquizDbContext> options, DomainEventsQueue queue) : DbContext(options)
+public class SowkoquizDbContext(DbContextOptions<SowkoquizDbContext> options, IDomainEventsQueue queue) : DbContext(options)
 {
     public DbSet<ActiveQuiz> ActiveQuizzes { get; init; }
     public DbSet<QuizzDefinition> QuizzDefinitions { get; init; }

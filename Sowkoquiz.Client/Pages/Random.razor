@@ -12,9 +12,9 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var quizId = await QuizServiceClient.RandomQuizAsync(new RandomQuizRequest());
+        var response = await QuizServiceClient.RandomQuizAsync(new RandomQuizRequest());
         
-        NavigationManager.NavigateTo($"/quiz/{quizId}");
+        NavigationManager.NavigateTo($"/quiz/{response.Id}");
     }
 
 }

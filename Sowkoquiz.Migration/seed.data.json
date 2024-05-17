@@ -105,5 +105,219 @@
         ]
       }
     ]
+  },
+  {
+    "Title": "Science Trivia Challenge",
+    "Description": "A quiz to challenge your knowledge in various scientific fields.",
+    "QuizzSize": 5,
+    "QuestionPool": [
+      {
+        "Text": "What is the most abundant gas in the Earth's atmosphere?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Oxygen",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "Nitrogen",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Carbon Dioxide",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What element has the highest melting point?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Iron",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "Tungsten",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Gold",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "Which planet is the hottest in the solar system?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Mercury",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "Venus",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Mars",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "Who developed the theory of relativity?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Isaac Newton",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "Albert Einstein",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Niels Bohr",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What is DNA short for?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Deoxyribonucleic Acid",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "Deoxynucleic Acid",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "Dinucleic Acid",
+            "IsCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Title": "History and Culture Quiz",
+    "Description": "Test your knowledge on key historical events and cultural milestones.",
+    "QuizzSize": 3,
+    "QuestionPool": [
+      {
+        "Text": "Which civilization is known for building the Machu Picchu complex?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "The Aztecs",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "The Mayans",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "The Incas",
+            "IsCorrect": true
+          }
+        ]
+      },
+      {
+        "Text": "In which city was the first underground subway system constructed?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "New York",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "London",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Paris",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "What year did the Berlin Wall fall?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "1989",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "1991",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "1987",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "Who wrote the national epic 'Mahabharata' of India?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "Valmiki",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "B",
+            "Text": "Vyasa",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "C",
+            "Text": "Kalidasa",
+            "IsCorrect": false
+          }
+        ]
+      },
+      {
+        "Text": "Which country gifted the Statue of Liberty to the United States?",
+        "Answers": [
+          {
+            "Letter": "A",
+            "Text": "France",
+            "IsCorrect": true
+          },
+          {
+            "Letter": "B",
+            "Text": "United Kingdom",
+            "IsCorrect": false
+          },
+          {
+            "Letter": "C",
+            "Text": "Germany",
+            "IsCorrect": false
+          }
+        ]
+      }
+    ]
   }
 ]

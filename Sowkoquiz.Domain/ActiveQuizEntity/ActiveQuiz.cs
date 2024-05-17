@@ -38,7 +38,8 @@ public class ActiveQuiz : AggregateRoot
     public Progress Progress { get; set; } = new();
     public bool IsFinished => Progress.Percentage == 100;
     public List<int?> AnsweredQuestionsId { get; init; } = [];
-    public DateTime EndTime { get; init; }
+    public DateTimeOffset EndTime { get; init; }
+    public QuizStatus Status { get; set; } = QuizStatus.Active;
     public string AccessKey { get; init; }
     
     protected override int HashCodeSeed => 7;
@@ -59,10 +60,9 @@ public class ActiveQuiz : AggregateRoot
 
         if (Progress.Percentage == 100)
         {
-            DomainEvents.Add(new QuizFinishedEvent(Id!.Value));
+            DomainEvents.Add(new QuizFinishedEvent(this));
             return null as Question;
         }
-            
         
         DomainEvents.Add(new RefreshQuizEvent(Id!.Value));
 

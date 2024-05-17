@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Sowkoquiz.Grpc";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
 package search;
 
 service SearchService {
@@ -17,7 +19,8 @@ message SearchQuizRequest{
 
 message SearchQuizResponse{
   repeated Quiz quiz = 1;
-
+  int32 total = 2;
+  
   message Quiz {
     int32 id = 1;
     string title = 2;
@@ -34,11 +37,13 @@ message GetUserHistoryRequest{
 
 message GetUserHistoryResponse{
   repeated HistoricalQuiz historicalQuiz = 1;
+  int32 total = 2;
   
   message HistoricalQuiz {
     int32 id = 1;
     string title = 2;
     QuizStatus status = 3;
+    google.protobuf.Timestamp EndDate = 4;
    
     message Progress{
       int32 totalQuestions = 1;
@@ -50,7 +55,7 @@ message GetUserHistoryResponse{
 
 
 enum QuizStatus{
-  ACTIVE = 0;
-  INACTIVE = 1;
-  DELETED = 2;
+  Active = 0;
+  Finished = 1;
+  Deleted = 2;
 }

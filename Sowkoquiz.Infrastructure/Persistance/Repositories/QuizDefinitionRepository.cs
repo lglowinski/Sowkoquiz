@@ -14,7 +14,7 @@ public class QuizDefinitionRepository(SowkoquizDbContext dbContext) : IQuizDefin
             .FirstOrDefaultAsync(quiz => quiz.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<QuizzDefinition>> SearchAsync(int take = 12, int skip = 0, string searchTerm = "",
+    public async Task<(IEnumerable<QuizzDefinition> Quizzes, int Total)> SearchAsync(int take = 12, int skip = 0, string searchTerm = "",
         CancellationToken cancellationToken = default)
     {
         var quizzes = dbContext.QuizzDefinitions.AsQueryable();
@@ -27,7 +27,11 @@ public class QuizDefinitionRepository(SowkoquizDbContext dbContext) : IQuizDefin
                     || EF.Functions.Like(quiz.Title, $"%{searchTerm}%"));
         }
 
-        return await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        var total = quizzes.Count();
+        
+        var result = await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
+
+        return new ValueTuple<IEnumerable<QuizzDefinition>, int>(result, total);
     }
 
     public Task<int> GetCountAsync(CancellationToken cancellationToken)

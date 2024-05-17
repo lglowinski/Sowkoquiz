@@ -1,7 +1,9 @@
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MediatR;
 using Sowkoquiz.Application.Search.SearchQuiz;
 using Sowkoquiz.Application.Search.UserHistory;
+using Enum = System.Enum;
 
 namespace Sowkoquiz.Grpc.Services;
 
@@ -15,13 +17,14 @@ public class SearchService(ISender sender) : Sowkoquiz.Grpc.SearchService.Search
         {
             Quiz =
             {
-                result.Select(quiz => new SearchQuizResponse.Types.Quiz
+                result.Quizzes.Select(quiz => new SearchQuizResponse.Types.Quiz
                 {
                     Description = quiz.Description,
                     Id = quiz.Id!.Value,
                     Title = quiz.Title
                 })
-            }
+            },
+            Total = result.TotalCount
         };
     }
 
@@ -36,13 +39,15 @@ public class SearchService(ISender sender) : Sowkoquiz.Grpc.SearchService.Search
         {
             HistoricalQuiz =
             {
-                result.Select(q => new GetUserHistoryResponse.Types.HistoricalQuiz
+                result.ActiveQuizzes.Select(q => new GetUserHistoryResponse.Types.HistoricalQuiz
                 {
                     Id = q.Id!.Value,
-                    Status = QuizStatus.Active,
-                    Title = q.Definition.Title
+                    Status = Enum.Parse<QuizStatus>(q.Status.ToString()),
+                    Title = q.Definition.Title,
+                    EndDate = Timestamp.FromDateTimeOffset(q.EndTime)
                 })
-            }
+            },
+            Total = result.TotalCount
         };
     }
 }

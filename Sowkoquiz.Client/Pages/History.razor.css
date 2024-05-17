@@ -1,0 +1,22 @@
+.table-responsive {
+    margin: 20px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.thead-light th {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.min-w-full, .w-full {
+    width: 100%;
+}

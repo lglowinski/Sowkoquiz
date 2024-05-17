@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -37,7 +36,8 @@ namespace Sowkoquiz.Infrastructure.Migrations
                     Max = table.Column<int>(type: "INTEGER", nullable: false),
                     Correct = table.Column<int>(type: "INTEGER", nullable: false),
                     AnsweredQuestionsId = table.Column<string>(type: "TEXT", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndTime = table.Column<long>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
                     AccessKey = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -95,6 +95,11 @@ namespace Sowkoquiz.Infrastructure.Migrations
                 name: "IX_ActiveQuizzes_DefinitionId",
                 table: "ActiveQuizzes",
                 column: "DefinitionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActiveQuizzes_EndTime",
+                table: "ActiveQuizzes",
+                column: "EndTime");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuizzDefinitionId",

@@ -4,7 +4,7 @@ using Sowkoquiz.Application.Common;
 
 namespace Sowkoquiz.Application.Quiz.AnswerQuestion;
 
-public class AnswerQuestionCommandHandler(IActiveQuizRepository activeQuizRepository)
+public class AnswerQuestionCommandHandler(IActiveQuizRepository activeQuizRepository, IDomainEventsQueue domainEventsQueue)
     : IRequestHandler<AnswerQuestionCommand, ErrorOr<AnswerQuestionCommandResult>>
 {
     public async Task<ErrorOr<AnswerQuestionCommandResult>> Handle(AnswerQuestionCommand request, CancellationToken cancellationToken)
@@ -17,7 +17,13 @@ public class AnswerQuestionCommandHandler(IActiveQuizRepository activeQuizReposi
         var result = quiz.AnswerQuestion(request.QuestionId, request.Letter, request.AccessKey);
 
         if (result.Value is null)
+        {
+            foreach (var @event in quiz.PopDomainEvents())
+                domainEventsQueue.Enqueue(@event);
+            
             return new AnswerQuestionCommandResult(quiz.Progress);
+        }
+            
         
         await activeQuizRepository.UpdateAsync(quiz, cancellationToken);
 

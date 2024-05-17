@@ -4,7 +4,7 @@ using Sowkoquiz.Domain.QuizzDefinitionAggregate;
 namespace Sowkoquiz.Application.Search.SearchQuiz;
 
 public record SearchQuizQuery
-    : IRequest<IEnumerable<QuizzDefinition>>
+    : IRequest<SearchQuizQueryResponse>
 {
     public int Take { get; }
 

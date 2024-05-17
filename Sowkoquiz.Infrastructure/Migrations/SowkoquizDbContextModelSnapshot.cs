@@ -34,12 +34,17 @@ namespace Sowkoquiz.Infrastructure.Migrations
                     b.Property<int>("DefinitionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("EndTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DefinitionId");
+
+                    b.HasIndex("EndTime");
 
                     b.ToTable("ActiveQuizzes");
                 });

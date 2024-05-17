@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Sowkoquiz.Application;
 using Sowkoquiz.Application.Common;
 using Sowkoquiz.Domain.Common;
 using Sowkoquiz.Infrastructure.DomainEvents;
@@ -14,7 +15,7 @@ public static class DependencyInjection
     {
         services.AddDatabase();
 
-        services.AddSingleton<DomainEventsQueue>();
+        services.AddSingleton<IDomainEventsQueue, DomainEventsQueue>();
 
         services
             .AddBackgroundService()

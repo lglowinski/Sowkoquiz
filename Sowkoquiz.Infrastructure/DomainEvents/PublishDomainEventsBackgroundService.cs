@@ -2,11 +2,12 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sowkoquiz.Application;
 
 namespace Sowkoquiz.Infrastructure.DomainEvents;
 
 public class PublishDomainEventsBackgroundService(
-    DomainEventsQueue queue,
+    IDomainEventsQueue queue,
     IServiceScopeFactory serviceScopeFactory,
     ILogger
         <PublishDomainEventsBackgroundService> logger)

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Sowkoquiz.Application.Common;
 using Sowkoquiz.Domain.ActiveQuizEntity;
@@ -34,7 +35,8 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ActiveQuiz>> SearchAsync(string accessKey, string searchTerm = "", int take = 12, int skip = 0,
+    public async Task<(IEnumerable<ActiveQuiz> Quizzes, int TotalCount)> SearchAsync(string accessKey, Expression<Func<ActiveQuiz,object>>? orderByPredicate,
+        string searchTerm = "", int take = 12, int skip = 0,
         CancellationToken cancellationToken = default)
     {
         var quizzes = dbContext
@@ -43,6 +45,9 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
             .Include(quiz => quiz.Definition)
             .AsQueryable();
 
+        if (orderByPredicate is not null)
+            quizzes = quizzes.OrderBy(orderByPredicate);
+        
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             quizzes = quizzes
@@ -51,6 +56,10 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
                     || EF.Functions.Like(quiz.Definition.Description, $"%{searchTerm}%"));
         }
 
-        return await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        var total = quizzes.Count();
+        
+        var result = await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
+
+        return new ValueTuple<IEnumerable<ActiveQuiz>, int>(result, total);
     }
 }
