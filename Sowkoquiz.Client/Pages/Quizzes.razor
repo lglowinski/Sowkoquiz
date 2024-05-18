@@ -1,8 +1,8 @@
-﻿@page "/quizes"
+﻿@page "/quizzes"
 @using Sowkoquiz.Grpc
 @using Sowkoquiz.Components
 @inject SearchService.SearchServiceClient SearchService
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Quizzes</PageTitle>
 
@@ -21,7 +21,7 @@ else
         </div>
 
         <div class="quiz-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-            @foreach (var quiz in Quizzes)
+            @foreach (var quiz in QuizzesData)
             {
                 <QuizTile Quiz="quiz"/>
             }
@@ -45,7 +45,7 @@ else
     [Inject]
     public NavigationManager NavigationManager { get; set; } = null!;
 
-    private List<SearchQuizResponse.Types.Quiz> Quizzes { get; set; } = [];
+    private List<SearchQuizResponse.Types.Quiz> QuizzesData { get; set; } = [];
     private int PageSize { get; set; }
     private int TotalCount { get; set; }
     private int MaxPages => (int)Math.Ceiling((double)TotalCount / PageSize);
@@ -64,7 +64,7 @@ else
 
     private async Task<int> CalculatePageSize()
     {
-        return await JSRuntime.InvokeAsync<int>("calculatePageSize");
+        return await JsRuntime.InvokeAsync<int>("calculatePageSize");
     }
 
     private async Task LoadQuizzes()
@@ -76,7 +76,7 @@ else
             SearchTerm = SearchTerm ?? string.Empty,
         });
 
-        Quizzes = response.Quiz.ToList();
+        QuizzesData = response.Quiz.ToList();
         TotalCount = response.Total;
         
         IsLoading = false;
