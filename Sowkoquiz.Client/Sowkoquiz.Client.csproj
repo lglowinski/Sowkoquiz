@@ -21,6 +21,7 @@
     
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+        <PackageReference Include="Blazored.Modal" Version="7.3.1" />
         <PackageReference Include="Google.Protobuf" Version="3.26.1" />
         <PackageReference Include="Grpc.Net.Client.Web" Version="2.62.0" />
         <PackageReference Include="Grpc.Net.ClientFactory" Version="2.62.0" />
@@ -37,6 +38,12 @@
       <Content Update="wwwroot\appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.WebUtilities">
+        <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.3\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

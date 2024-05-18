@@ -44,7 +44,7 @@ public class SearchService(ISender sender) : Sowkoquiz.Grpc.SearchService.Search
                     Id = q.Id!.Value,
                     Status = Enum.Parse<QuizStatus>(q.Status.ToString()),
                     Title = q.Definition.Title,
-                    EndDate = Timestamp.FromDateTimeOffset(q.EndTime)
+                    Date = Timestamp.FromDateTimeOffset(q.EndTime)
                 })
             },
             Total = result.TotalCount

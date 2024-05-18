@@ -1,0 +1,125 @@
+@page "/details/{Id:int}"
+@using Blazored.Modal.Services
+@using Sowkoquiz.Constants
+@using Sowkoquiz.Grpc
+@using Sowkoquiz.Components
+@inject QuizService.QuizServiceClient QuizServiceClient
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+@if (details is not null)
+{
+    <div class="flex flex-col items-start w-full h-full p-4 bg-gray-100">
+        <div class="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-3xl font-bold text-gray-800">@details.Name</h3>
+                <div class="flex items-center space-x-2">
+                    <p class="text-lg text-gray-500">@date.ToString("dd-MM-yyyy HH:mm")</p>
+                    <button @onclick="ShowDeleteConfirmation" class="text-red-500 hover:text-red-700 transition duration-150 ease-in-out">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0h12l3-1m-15 1v10a2 2 0 002 2h8a2 2 0 002-2V7m-10 0v4m0-4v4m0 0h4m-4 0h4"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <p class="text-center text-xl font-medium text-gray-700 mb-6">Your score: @details.Progress.Correct / @details.Progress.Total</p>
+
+            <div class="space-y-4">
+                @foreach (var question in details.AnsweredQuestion)
+                {
+                    <div class="p-4 border border-gray-200 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-2">
+                            <p class="text-lg font-semibold text-gray-900 flex-grow">@question.Text</p>
+                            @if (question.IsCorrect)
+                            {
+                                <span class="text-green-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-red-500">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </span>
+                            }
+                        </div>
+
+                        <p class="text-md @IsCorrect(question.IsCorrect)">
+                            <span class="font-semibold">Your Answer:</span> @question.Answer
+                        </p>
+
+                        <p class="text-md text-gray-600">
+                            <span class="font-semibold">Correct Answer:</span> @question.CorrectAnswer
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="flex justify-center items-center mt-8">
+        <div class="loader"></div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+    [CascadingParameter] public IModalService Modal { get; set; } = default!;
+
+    private Grpc.QuizDetails? details;
+    private DateTime date;
+    private bool showDeleteConfirmation = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var key = await GetKey();
+
+        var result = await QuizServiceClient.GetQuizDetailsAsync(new QuizDetailsRequest
+        {
+            Id = Id,
+            AccessKey = key
+        });
+
+        details = result.Details;
+        date = details.Date.ToDateTime().ToLocalTime();
+    }
+
+
+    private async Task<string> GetKey()
+    {
+        var key = await LocalStorage.GetItemAsync<string>(LocalStorageKeys.AccessKey);
+
+        return key;
+    }
+
+    private async Task ShowDeleteConfirmation()
+    {
+        var modal = Modal.Show<DeleteConfirmation>();
+
+        var result = await modal.Result;
+
+        if (result.Confirmed)
+            await ConfirmDeleteQuiz();
+    }
+    
+    private async Task ConfirmDeleteQuiz()
+    {
+        var key = await GetKey();
+        await QuizServiceClient.DeleteUserQuizAsync(new DeleteUserQuizRequest { Id = Id, AccessKey = key});
+        NavigationManager.NavigateTo("/history");
+    }
+    
+
+    private static string IsCorrect(bool isCorrect)
+    {
+        return isCorrect ? "text-green-500" : "text-red-500";
+    }
+
+}

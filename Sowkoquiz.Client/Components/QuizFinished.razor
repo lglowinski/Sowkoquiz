@@ -1,0 +1,69 @@
+@using Sowkoquiz.Grpc
+
+<div class="container mx-auto mt-8 p-8 bg-white shadow-lg rounded-lg">
+    <div class="text-center mb-6">
+        <h3 class="text-4xl font-bold text-gray-800">Quiz finished!</h3>
+    </div>
+    <div class="text-xl mb-8 text-gray-600">
+        @if (Score.Passed)
+        {
+        <p class="text-green-600">Congratulations you passed!</p>
+        }
+        else
+        {
+        <p class="text-red-600">Try again! Score more than @GetPassPercentage()% to pass this quiz</p>
+        }
+        <p class="mb-4"><span class="font-semibold">Correct answers:</span> @Score.Correct</p>
+        <p><span class="font-semibold">Your score:</span> @Score.Correct / @Score.Total <span class="text-gray-500">(@GetPercentage()e%)</span></p>
+    </div>
+    <div class="flex justify-center space-x-4">
+        <button @onclick="GoToDetails" class="px-6 py-3 bg-blue-500 text-white text-lg rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">
+            Go to details
+        </button>
+        <button @onclick="TryAgain" class="px-6 py-3 bg-blue-500 text-white text-lg rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">
+            Try again
+        </button>
+        <button @onclick="GoToRandom" class="px-6 py-3 bg-blue-500 text-white text-lg rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">
+            Random quiz
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] 
+    public Score Score { get; set; }
+    
+    [Parameter] 
+    public int Id { get; set; }
+    [Parameter]
+    public int DefinitionId { get; set; }
+        
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    
+    private void GoToDetails()
+    {
+        NavigationManager.NavigateTo($"/details/{Id}");
+    }
+
+    private void TryAgain()
+    {
+        NavigationManager.Refresh();
+    }
+
+    private void GoToRandom()
+    {
+        NavigationManager.NavigateTo($"/random");
+    }
+
+    private int GetPassPercentage()
+    {
+        return (int)Score.PassThreshold;
+    }
+    
+    private int GetPercentage()
+    {
+        return (int)Score.Percentage;
+    }
+
+}

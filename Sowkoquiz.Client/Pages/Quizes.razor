@@ -2,46 +2,123 @@
 @using Sowkoquiz.Grpc
 @using Sowkoquiz.Components
 @inject SearchService.SearchServiceClient SearchService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Quizzes</PageTitle>
 
-<div class="container mx-auto p-4">
-    <div class="flex justify-center mb-6">
-        <input type="text" @bind="_searchTerm" placeholder="Type to search..." class="w-full max-w-lg p-2 border border-gray-300 rounded-l-md" />
-        <button @onclick="OnSearch" class="p-2 bg-blue-500 text-white rounded-r-md">Search</button>
+@if (IsLoading)
+{
+    <div class="flex justify-center items-center mt-8">
+        <div class="loader"></div>
     </div>
+}
+else
+{
+    <div class="container mx-auto p-4">
+        <div class="flex justify-center mb-6">
+            <input type="text" @bind="SearchTerm" placeholder="Type to search..." class="w-full max-w-lg p-2 border border-gray-300 rounded-l-md"/>
+            <button @onclick="OnSearch" class="p-2 bg-blue-500 text-white rounded-r-md">Search</button>
+        </div>
 
-    <div class="quiz-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-        <Virtualize ItemsProvider="GetItems" Context="quiz"  @ref="_virtualizeComponent">
-            <QuizTile Quiz="@quiz" />
-        </Virtualize>
+        <div class="quiz-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+            @foreach (var quiz in Quizzes)
+            {
+                <QuizTile Quiz="quiz"/>
+            }
+        </div>
+
+        <div class="flex justify-between items-center mt-6">
+            <button @onclick="PreviousPage" class="p-2 bg-gray-500 text-white rounded-md" disabled="@IsPreviousDisabled">Previous</button>
+            <span>Page @CurrentPage of @MaxPages</span>
+            <button @onclick="NextPage" class="p-2 bg-blue-500 text-white rounded-md" disabled="@IsNextDisabled">Next</button>
+        </div>
     </div>
-</div>
+}
 
 @code {
-    private int _totalCount = 0;
-    private string _searchTerm = string.Empty;
-    private Virtualize<SearchQuizResponse.Types.Quiz> _virtualizeComponent;
+    [SupplyParameterFromQuery(Name = "searchTerm")]
+    public string? SearchTerm { get; set; } = string.Empty;
 
-    private async ValueTask<ItemsProviderResult<SearchQuizResponse.Types.Quiz>> GetItems(ItemsProviderRequest request)
+    [SupplyParameterFromQuery(Name = "page")]
+    public int CurrentPage { get; set; } = 1;
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; } = null!;
+
+    private List<SearchQuizResponse.Types.Quiz> Quizzes { get; set; } = [];
+    private int PageSize { get; set; }
+    private int TotalCount { get; set; }
+    private int MaxPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
     {
-        var numQuizes = Math.Min(request.Count, _totalCount - request.StartIndex);
+        PageSize = await CalculatePageSize();
+        await LoadQuizzes();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadQuizzes();
+    }
+
+    private async Task<int> CalculatePageSize()
+    {
+        return await JSRuntime.InvokeAsync<int>("calculatePageSize");
+    }
+
+    private async Task LoadQuizzes()
+    {
         var response = await SearchService.SearchQuizAsync(new SearchQuizRequest
         {
-            Take = 3, 
-            Skip = numQuizes, 
-            SearchTerm = _searchTerm
+            Take = PageSize,
+            Skip = (CurrentPage - 1) * PageSize,
+            SearchTerm = SearchTerm ?? string.Empty,
         });
 
-        _totalCount = response.Total;
-
-        return new ItemsProviderResult<SearchQuizResponse.Types.Quiz>(response.Quiz, _totalCount);
+        Quizzes = response.Quiz.ToList();
+        TotalCount = response.Total;
+        
+        IsLoading = false;
+        StateHasChanged();
     }
 
-    private async Task OnSearch()
+    private void OnSearch()
     {
-        _totalCount = 0;
-        await _virtualizeComponent.RefreshDataAsync();
+        CurrentPage = 1;
+        UpdateQuery();
     }
 
+    private void PreviousPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
+            UpdateQuery();
+        }
+    }
+
+    private void NextPage()
+    {
+        if (CurrentPage < MaxPages)
+        {
+            CurrentPage++;
+            UpdateQuery();
+        }
+    }
+
+    private void UpdateQuery()
+    {
+        var query = new Dictionary<string, object?>
+        {
+            { "searchTerm", SearchTerm },
+            { "page", CurrentPage.ToString() }
+        };
+
+        var uri = NavigationManager.GetUriWithQueryParameters(query);
+        NavigationManager.NavigateTo(uri);
+    }
+
+    private bool IsPreviousDisabled => CurrentPage == 1;
+    private bool IsNextDisabled => CurrentPage >= MaxPages;
 }

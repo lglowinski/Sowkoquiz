@@ -6,7 +6,7 @@ using Sowkoquiz.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.RegisterOptions<AppConfiguration>();
+var opt = builder.Services.RegisterAndGetOptions<AppConfiguration>();
 
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", b =>
 {
@@ -21,7 +21,7 @@ builder.Services.AddGrpc();
 
 builder
     .Services
-    .AddInfrastructure()
+    .AddInfrastructure(opt.Value.QuizzRetentionTimeInMinutes)
     .AddApplication();
 
 var app = builder.Build();

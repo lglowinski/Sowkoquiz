@@ -7,15 +7,17 @@ public record AnswerQuestionCommandResult
 {
     public Question? CurrentQuestion { get; init; }
     public Progress? Progress { get; init; }
+    public float PassThreshold { get; init; } 
 
     public AnswerQuestionCommandResult(Question question)
     {
         CurrentQuestion = question;
     }
 
-    public AnswerQuestionCommandResult(Progress progress)
+    public AnswerQuestionCommandResult(Progress progress, float passThreshold)
     {
         Progress = progress;
+        PassThreshold = passThreshold;
     }
 
     public void ValidateState()

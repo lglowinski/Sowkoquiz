@@ -23,5 +23,12 @@ public class ActiveQuizConfiguration : IEntityTypeConfiguration<ActiveQuiz>
             progress.Property(p => p.Correct).HasColumnName("Correct");
             progress.Property(p => p.Max).HasColumnName("Max");
         });
+
+        builder.OwnsMany(quiz => quiz.AnsweredQuestions, answered =>
+        {
+            answered.WithOwner().HasForeignKey("ActiveQuizId");
+            answered.Property(a => a.Letter).HasColumnName("Letter");
+            answered.HasKey("Id", "ActiveQuizId", "Letter");
+        });
     }
 }

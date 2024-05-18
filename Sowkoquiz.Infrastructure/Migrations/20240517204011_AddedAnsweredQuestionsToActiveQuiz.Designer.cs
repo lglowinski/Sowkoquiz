@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sowkoquiz.Infrastructure.Persistance;
 
@@ -10,9 +11,11 @@ using Sowkoquiz.Infrastructure.Persistance;
 namespace Sowkoquiz.Infrastructure.Migrations
 {
     [DbContext(typeof(SowkoquizDbContext))]
-    partial class SowkoquizDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240517204011_AddedAnsweredQuestionsToActiveQuiz")]
+    partial class AddedAnsweredQuestionsToActiveQuiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -73,18 +76,13 @@ namespace Sowkoquiz.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(512)
                         .HasColumnType("TEXT");
-
-                    b.Property<float>("PassedThreshold")
-                        .HasColumnType("REAL");
 
                     b.Property<int>("QuizzSize")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

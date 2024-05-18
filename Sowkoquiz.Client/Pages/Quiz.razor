@@ -4,18 +4,15 @@
 @using System.Diagnostics.CodeAnalysis
 @using Sowkoquiz.Constants
 @using Sowkoquiz.Grpc
+@using Sowkoquiz.Components
 
 
-@if (_displayResult)
+@if (DisplayResult)
 {
-    <PageTitle>Quiz</PageTitle>
-    <div class="container mx-auto mt-8 p-4 text-center bg-white shadow rounded">
-        <h3 class="text-2xl font-bold mb-4">Quiz finished!</h3>
-        <p class="text-lg mb-2">Correct answers: @_score.Correct</p>
-        <p class="text-lg">Your score: @_score.Correct / @_score.Total</p>
-    </div>
+    <PageTitle>Quiz Result</PageTitle>
+    <QuizFinished Score="@Score" Id="@ActiveQuizId" DefinitionId="@Id"/>
 }
-else if (_currentQuestion == null)
+else if (CurrentQuestion == null)
 {
     <div class="flex justify-center items-center mt-8">
         <div class="loader"></div>
@@ -23,14 +20,15 @@ else if (_currentQuestion == null)
 }
 else
 {
-    if (!isSubmitting)
+    <PageTitle>@CurrentQuestion.Text</PageTitle>
+    if (!IsSubmitting)
     {
         <div class="container mx-auto mt-8 p-4">
             <div class="bg-white p-6 rounded shadow-md">
                 <form method="post" @onsubmit="HandleValidSubmit">
                     <fieldset class="space-y-4">
                         <legend class="text-2xl font-semibold">Question @_questionCount</legend>
-                        <h4 class="text-xl font-semibold">@_currentQuestion.Text</h4>
+                        <h4 class="text-xl font-semibold">@CurrentQuestion.Text</h4>
                         <div class="space-y-2">
                             <InputRadioGroup @bind-Value="Model.Letter" class="accent-gray-700">
                                 @foreach (var answer in _answers)
@@ -59,16 +57,18 @@ else
 }
 
 @code {
-    [Parameter] public int Id { get; set; }
-
-    private int _activeQuizId;
-    private string _accessKey = "";
+    [Parameter] 
+    public int Id { get; set; }
+    
     private readonly QuestionModel Model = new();
-    private Question? _currentQuestion = null;
-    private bool _displayResult = false;
-    private Score? _score = null;
-    private bool isSubmitting;
-    private bool BtnDisabled => string.IsNullOrWhiteSpace(Model.Letter) || isSubmitting;
+    
+    private int ActiveQuizId { get; set; }
+    private string _accessKey = "";
+    private Score Score { get; set; } = null!;
+    private Question? CurrentQuestion { get; set; }
+    private bool DisplayResult { get; set; } =  false;
+    private bool IsSubmitting { get; set; } = false;
+    private bool BtnDisabled => string.IsNullOrWhiteSpace(Model.Letter) || IsSubmitting;
     private List<Question.Types.Answer> _answers = [];
     private int _questionCount = 1;
 
@@ -81,24 +81,24 @@ else
             AccessKey = _accessKey
         }));
         
-        _currentQuestion = response.Question;
-        _answers = _currentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
-        _activeQuizId = response.Id;
+        CurrentQuestion = response.Question;
+        _answers = CurrentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
+        ActiveQuizId = response.Id;
     }
 
     private async Task HandleValidSubmit()
     {
-        if (isSubmitting) return;
+        if (IsSubmitting) return;
 
-        isSubmitting = true;
+        IsSubmitting = true;
 
         try
         {
-            Model.QuestionId = _currentQuestion!.Id;
+            Model.QuestionId = CurrentQuestion!.Id;
 
             var response = await QuizServiceClient.AnswerQuestionAsync(new AnswerQuestionRequest
             {
-                QuizId = _activeQuizId,
+                QuizId = ActiveQuizId,
                 QuestionId = Model.QuestionId,
                 Letter = Model.Letter,
                 AccessKey = _accessKey
@@ -109,13 +109,13 @@ else
             switch (response.ResponseCase)
             {
                 case AnswerQuestionResponse.ResponseOneofCase.NextQuestion:
-                    _currentQuestion = response.NextQuestion;
-                    _answers = _currentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
+                    CurrentQuestion = response.NextQuestion;
+                    _answers = CurrentQuestion.Answers.OrderBy(_ => Guid.NewGuid()).ToList();
                     _questionCount++;
                     break;
                 case AnswerQuestionResponse.ResponseOneofCase.Score:
-                    _displayResult = true;
-                    _score = response.Score;
+                    DisplayResult = true;
+                    Score = response.Score;
                     break;
                 case AnswerQuestionResponse.ResponseOneofCase.None:
                     break;
@@ -125,7 +125,7 @@ else
         }
         finally
         {
-            isSubmitting = false;
+            IsSubmitting = false;
             StateHasChanged();
         }
     }
@@ -136,7 +136,6 @@ else
 
         return key;
     }
-
 
     private class QuestionModel()
     {

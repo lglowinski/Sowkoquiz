@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 option csharp_namespace = "Sowkoquiz.Grpc";
+import "google/protobuf/timestamp.proto";
 
 package quiz;
 
@@ -9,6 +10,8 @@ service QuizService {
   rpc AnswerQuestion (AnswerQuestionRequest) returns (AnswerQuestionResponse);
   rpc ResumeQuiz (ResumeQuizRequest) returns (ResumeQuizResponse);
   rpc RandomQuiz (RandomQuizRequest) returns (RandomQuizResponse);
+  rpc GetQuizDetails (QuizDetailsRequest) returns (QuizDetailsResponse);
+  rpc DeleteUserQuiz (DeleteUserQuizRequest) returns (DeleteUserQuizResponse);
 }
 
 message StartQuizRequest {
@@ -52,6 +55,45 @@ message RandomQuizResponse{
   int32 id = 1;
 }
 
+message QuizDetailsRequest{
+  int32 id = 1;
+  string accessKey = 2;
+}
+
+message QuizDetailsResponse{
+  QuizDetails details = 1;
+}
+
+message DeleteUserQuizRequest{
+  int32 id = 1;
+  string accessKey = 2;
+}
+
+message DeleteUserQuizResponse{
+  bool success = 1;
+}
+
+message QuizDetails{
+  int32 id = 1;
+  string name = 2;
+  repeated AnsweredQuestion answeredQuestion = 3;
+  Progress progress = 4;
+  google.protobuf.Timestamp Date = 5;
+  
+  message AnsweredQuestion{
+    string text = 1;
+    string answer = 2;
+    string correctAnswer = 3;
+    bool isCorrect = 4;
+  }
+  
+  message Progress{
+    int32 correct = 1;
+    int32 total = 2;
+  }
+  
+}
+
 message Question{
   int32 id = 1;
   string text = 2;
@@ -66,4 +108,7 @@ message Question{
 message Score{
   int32 correct = 1;
   int32 total = 2;
+  bool passed = 3;
+  float passThreshold = 4;
+  float percentage = 5;
 }

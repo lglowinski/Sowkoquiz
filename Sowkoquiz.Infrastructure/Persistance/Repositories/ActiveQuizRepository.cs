@@ -19,6 +19,7 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
         return await dbContext.ActiveQuizzes
             .Include(q => q.Definition)
             .Include(q => q.Definition.QuestionPool)
+            .Include(q => q.AnsweredQuestions)
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
     }
 
@@ -29,10 +30,12 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(ActiveQuiz quiz, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateAsync(ActiveQuiz quiz, CancellationToken cancellationToken = default)
     {
         dbContext.ActiveQuizzes.Update(quiz);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        var result = await dbContext.SaveChangesAsync(cancellationToken);
+
+        return result > 0;
     }
 
     public async Task<(IEnumerable<ActiveQuiz> Quizzes, int TotalCount)> SearchAsync(string accessKey, Expression<Func<ActiveQuiz,object>>? orderByPredicate,
@@ -61,5 +64,13 @@ public class ActiveQuizRepository(SowkoquizDbContext dbContext) : IActiveQuizRep
         var result = await quizzes.Skip(skip).Take(take).ToListAsync(cancellationToken);
 
         return new ValueTuple<IEnumerable<ActiveQuiz>, int>(result, total);
+    }
+
+    public async Task<List<ActiveQuiz>> GetInactiveQuizzesAsync(int retentionTime, CancellationToken cancellationToken = default)
+    {
+        var retentionDate = DateTime.UtcNow.AddMinutes(-retentionTime);
+        return await dbContext.ActiveQuizzes
+            .Where(quiz => quiz.EndTime < retentionDate && quiz.Status == QuizStatus.Active)
+            .ToListAsync(cancellationToken);
     }
 }

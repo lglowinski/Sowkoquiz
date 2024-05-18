@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Sowkoquiz;
@@ -32,6 +33,8 @@ builder
     .RegisterGrpcClient<QuizService.QuizServiceClient>(config.GrpcBaseUrl)
     .RegisterGrpcClient<SearchService.SearchServiceClient>(config.GrpcBaseUrl)
     .RegisterGrpcClient<AccessService.AccessServiceClient>(config.GrpcBaseUrl);
+
+builder.Services.AddBlazoredModal();
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");

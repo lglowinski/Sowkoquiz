@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Sowkoquiz.Domain.ActiveQuizEntity;
 using Sowkoquiz.Domain.Common;
@@ -21,10 +22,15 @@ public class QuizzDefinition(int? id = null) : Entity(id)
         
     }
     
+    [MaxLength(128)]
     public string Title { get; set; } = null!;
+    [MaxLength(512)]
     public string Description { get; set; } = null!;
     public virtual List<Question> QuestionPool { get; set; } = null!;
     public int QuizzSize { get; set; }
+    
+    [Range(0, 100)]
+    public float PassedThreshold { get; set; } = 70;
     
     protected override int HashCodeSeed => 11;
 

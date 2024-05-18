@@ -9,10 +9,10 @@ public static class AnswerQuestionMapper
     {
         result.ValidateState();
 
-        return result.CurrentQuestion is null ? GetScore(result.Progress!) : NextQuestion(result.CurrentQuestion);
+        return result.CurrentQuestion is null ? GetScore(result.Progress!, result.PassThreshold) : NextQuestion(result.CurrentQuestion);
     }
 
-    private static AnswerQuestionResponse GetScore(Progress activeQuizProgress)
+    private static AnswerQuestionResponse GetScore(Progress activeQuizProgress, float passThreshold)
     {
         return new AnswerQuestionResponse
         {
@@ -20,6 +20,9 @@ public static class AnswerQuestionMapper
             {
                 Correct = activeQuizProgress.Correct,
                 Total = activeQuizProgress.Max,
+                Passed = activeQuizProgress.HasPassed(passThreshold),
+                PassThreshold = passThreshold,
+                Percentage = activeQuizProgress.CorrectPercentage
             }
         };
     }

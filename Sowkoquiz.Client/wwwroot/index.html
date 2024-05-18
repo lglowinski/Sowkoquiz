@@ -14,11 +14,9 @@
 
 <body class="bg-gray-100">
     <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+        <div class="flex justify-center items-center mt-8">
+            <div class="loader"></div>
+        </div>
     </div>
 
     <div id="blazor-error-ui">
@@ -26,6 +24,8 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
+    <script src="./js/tileSize.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 

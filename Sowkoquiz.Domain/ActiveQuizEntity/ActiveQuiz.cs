@@ -11,12 +11,12 @@ namespace Sowkoquiz.Domain.ActiveQuizEntity;
 public class ActiveQuiz : AggregateRoot
 {
     public ActiveQuiz(QuizzDefinition definition,
-        List<int?> answered, 
+        List<AnsweredQuestion> answered, 
         DateTime endTime,
         string accessKey, 
         Progress progress, int id = -7) : this(definition, accessKey, endTime, progress, id)
     {
-        AnsweredQuestionsId = answered;
+        AnsweredQuestions = answered;
     }
 
     [JsonConstructor]
@@ -36,8 +36,8 @@ public class ActiveQuiz : AggregateRoot
     
     public virtual QuizzDefinition Definition { get; init; }
     public Progress Progress { get; set; } = new();
-    public bool IsFinished => Progress.Percentage == 100;
-    public List<int?> AnsweredQuestionsId { get; init; } = [];
+    public bool IsFinished => Math.Abs(Progress.AnsweredPercentage - 100) < 1;
+    public List<AnsweredQuestion> AnsweredQuestions { get; init; } = [];
     public DateTimeOffset EndTime { get; init; }
     public QuizStatus Status { get; set; } = QuizStatus.Active;
     public string AccessKey { get; init; }
@@ -46,19 +46,19 @@ public class ActiveQuiz : AggregateRoot
     
     public ErrorOr<Question?> AnswerQuestion(int questionId, char letter, string accessKey)
     {
-        if (!accessKey.Equals(AccessKey))
+        if (!HasAccess(accessKey))
             return Error.Forbidden(description: "Access is not allowed for this quiz");
         
         var question = Definition.QuestionPool.First(q => q.Id == questionId);
         var answer = question.Answers.First(a => a.Letter == letter);
 
         Progress.Answered++;
-        AnsweredQuestionsId.Add(questionId);
+        AnsweredQuestions.Add(new AnsweredQuestion(questionId, letter));
         
         if (answer.IsCorrect)
             Progress.Correct++;
 
-        if (Progress.Percentage == 100)
+        if (IsFinished)
         {
             DomainEvents.Add(new QuizFinishedEvent(this));
             return null as Question;
@@ -76,10 +76,15 @@ public class ActiveQuiz : AggregateRoot
         {
             var question = Definition.QuestionPool.Random();
 
-            if (AnsweredQuestionsId.Contains(question.Id))
+            if (AnsweredQuestions.AlreadyAnswered(question.Id!.Value))
                 continue;
             
             return question;
         }
+    }
+
+    public bool HasAccess(string accessKey)
+    {
+        return AccessKey.Equals(accessKey, StringComparison.OrdinalIgnoreCase);
     }
 }

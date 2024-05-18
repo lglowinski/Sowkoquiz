@@ -20,10 +20,18 @@ public class Progress : ValueObject
 
     public int Answered { get; set; }
     public int Max { get; init; }
-    
     public int Correct { get; set; }
     
-    public decimal Percentage => (decimal)Answered / Max * 100;
+    public float CorrectPercentage => (float)Correct / Max * 100;
+    public float AnsweredPercentage => (float)Answered / Max * 100;
+
+    public bool HasPassed(float threshold)
+    {
+        if (Math.Abs(AnsweredPercentage - 100) > 0.1)
+            return false;
+        
+        return CorrectPercentage >= threshold;
+    }
     
     public override IEnumerable<object> GetEqualityComponents()
     {

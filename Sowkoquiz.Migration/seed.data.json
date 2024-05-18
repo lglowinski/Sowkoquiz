@@ -3,6 +3,7 @@
     "Title": "General Knowledge Quiz",
     "Description": "A quiz to test your general knowledge across various subjects.",
     "QuizzSize": 5,
+    "PassedThreshold": 60,
     "QuestionPool": [
       {
         "Text": "What is the capital of France?",
@@ -110,6 +111,7 @@
     "Title": "Science Trivia Challenge",
     "Description": "A quiz to challenge your knowledge in various scientific fields.",
     "QuizzSize": 5,
+    "PassedThreshold": 70,
     "QuestionPool": [
       {
         "Text": "What is the most abundant gas in the Earth's atmosphere?",
@@ -217,6 +219,7 @@
     "Title": "History and Culture Quiz",
     "Description": "Test your knowledge on key historical events and cultural milestones.",
     "QuizzSize": 3,
+    "PassedThreshold": 45,
     "QuestionPool": [
       {
         "Text": "Which civilization is known for building the Machu Picchu complex?",
