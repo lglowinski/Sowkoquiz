@@ -1,4 +1,4 @@
 .quiz-list > div {
-    min-height: 50px;
-    min-width: 0
+    min-height: 100px;
+    min-width: 0;
 }
