@@ -101,3 +101,23 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.col-title {
+    width: 50%;
+    min-width:50%;
+}
+
+.col-status {
+    width: 16.6667%;
+    min-width:16.6667%;
+}
+
+.col-end-time {
+    width: 16.6667%;
+    min-width:16.6667%;
+}
+
+.col-actions {
+    width: 16.6667%;
+    min-width:16.6667%;
+}

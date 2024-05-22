@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Common", "Sowkoqu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.Migration", "Sowkoquiz.Migration\Sowkoquiz.Migration.csproj", "{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sowkoquiz.DataUploader", "Sowkoquiz.DataUploader\Sowkoquiz.DataUploader.csproj", "{16F66BF9-5314-4EE9-9215-9A688F156679}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{228DFC21-8E04-4C5E-A1A0-A3ACD72F1889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16F66BF9-5314-4EE9-9215-9A688F156679}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16F66BF9-5314-4EE9-9215-9A688F156679}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16F66BF9-5314-4EE9-9215-9A688F156679}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16F66BF9-5314-4EE9-9215-9A688F156679}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{83E60DF5-ACA8-43DF-9174-080DA8BF6D61} = {9B1AC54A-F216-4564-BD92-49C6AE1E856B}

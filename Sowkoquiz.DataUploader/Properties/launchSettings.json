@@ -1,0 +1,13 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Sowkoquiz.DataUploader": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "commandLineArgs": "\"C:\\Users\\lukas\\OneDrive\\Magisterka\\Angielski\\Sowkoquizz\\Sowkoquiz.Grpc\\Sowkoquiz.db\" \"C:\\Users\\lukas\\OneDrive\\Magisterka\\Angielski\\Sowkoquizz\\Sowkoquiz.DataUploader\\bin\\Debug\\net8.0\\data\""
+    }
+  }
+}

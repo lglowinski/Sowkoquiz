@@ -8,12 +8,12 @@ function calculatePageSize() {
 function calculateCardHeight() {
     switch (window.innerWidth) {
         case window.innerWidth < 640:
-            return 200;
+            return 50;
         case window.innerWidth < 768:
-            return 250;
+            return 100;
         case window.innerWidth < 1024:
-            return 300;
+            return 200;
         default:
-            return 350;
+            return 200;
     }
 }

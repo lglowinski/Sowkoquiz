@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Sowkoquiz</RootNamespace>
+        <AssemblyVersion>1.0.1.*</AssemblyVersion>
+        <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+        <Deterministic>false</Deterministic>
     </PropertyGroup>
 
     <ItemGroup>
@@ -38,12 +41,17 @@
       <Content Update="wwwroot\appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Content Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
     </ItemGroup>
     
     <ItemGroup>
       <Reference Include="Microsoft.AspNetCore.WebUtilities">
         <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.3\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
       </Reference>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="wwwroot\css\bootstrap\" />
     </ItemGroup>
 
 </Project>

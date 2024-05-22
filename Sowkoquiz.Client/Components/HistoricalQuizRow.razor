@@ -5,27 +5,23 @@
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <tr class="transition duration-150 ease-in-out hover:bg-gray-50" @onclick="GoToDetails">
-    <td class="px-6 py-6 lg:whitespace-nowrap text-sm font-medium overflow-hidden text-gray-900 text-overflow-ellipsis" title="@Id">
-        @Id
-    </td>
-    <td class="px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@Title">
+    <td class="col-title px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@Title">
         @Title
     </td>
-    <td class="px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@Status">
+    <td class="col-status px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@Status">
         @Status
     </td>
-    <td class="px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@EndTime.ToString("dd.MM.yyyy HH:mm")">
+    <td class="col-end-time px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis" title="@EndTime.ToString("dd.MM.yyyy HH:mm")">
         @EndTime.ToString("dd-MM-yyyy HH:mm")
     </td>
-    <td class="px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis">
+    <td class="col-actions px-6 py-6 lg:whitespace-nowrap text-sm text-gray-500 overflow-hidden text-overflow-ellipsis">
         <button @onclick:stopPropagation="true" @onclick="ShowDeleteConfirmation" class="text-red-500 hover:text-red-700 transition duration-150 ease-in-out">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0h12l3-1m-15 1v10a2 2 0 002 2h8a2 2 0 002-2V7m-10 0v4m0-4v4m0 0h4m-4 0h4"></path>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
             </svg>
         </button>
     </td>
 </tr>
-
 @code {
     [Parameter]
     public int Id { get; set; }
@@ -71,7 +67,6 @@
     {
         var key = await GetKey();
         await QuizServiceClient.DeleteUserQuizAsync(new DeleteUserQuizRequest { Id = Id, AccessKey = key});
-        //NavigationManager.Refresh();
 
         await OnQuizDeleted.InvokeAsync();
     }

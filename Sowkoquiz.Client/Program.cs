@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Blazored.LocalStorage;
@@ -8,6 +9,7 @@ using Sowkoquiz;
 using Sowkoquiz.Configuration;
 using Sowkoquiz.Extensions;
 using Sowkoquiz.Grpc;
+using Sowkoquiz.Providers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -15,6 +17,9 @@ var config = new AppConfiguration
 {
     GrpcBaseUrl = new Uri(builder.Configuration["AppConfiguration:GrpcBaseUrl"]!)
 };
+
+
+builder.Services.AddSingleton<VersionProvider>(sp => new VersionProvider(Assembly.GetExecutingAssembly()));
 
 
 builder.Services.AddBlazoredLocalStorage(cfg =>

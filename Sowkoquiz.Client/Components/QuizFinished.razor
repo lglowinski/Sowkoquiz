@@ -14,7 +14,7 @@
         <p class="text-red-600">Try again! Score more than @GetPassPercentage()% to pass this quiz</p>
         }
         <p class="mb-4"><span class="font-semibold">Correct answers:</span> @Score.Correct</p>
-        <p><span class="font-semibold">Your score:</span> @Score.Correct / @Score.Total <span class="text-gray-500">(@GetPercentage()e%)</span></p>
+        <p><span class="font-semibold">Your score:</span> @Score.Correct / @Score.Total <span class="text-gray-500">(@GetPercentage()%)</span></p>
     </div>
     <div class="flex justify-center space-x-4">
         <button @onclick="GoToDetails" class="px-6 py-3 bg-blue-500 text-white text-lg rounded shadow hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">

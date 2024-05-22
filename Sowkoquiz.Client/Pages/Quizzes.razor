@@ -20,7 +20,7 @@ else
             <button @onclick="OnSearch" class="p-2 bg-blue-500 text-white rounded-r-md">Search</button>
         </div>
 
-        <div class="quiz-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        <div class="quiz-list grid-cols grid auto-rows-fr grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
             @foreach (var quiz in QuizzesData)
             {
                 <QuizTile Quiz="quiz"/>
@@ -28,9 +28,17 @@ else
         </div>
 
         <div class="flex justify-between items-center mt-6">
-            <button @onclick="PreviousPage" class="p-2 bg-gray-500 text-white rounded-md" disabled="@IsPreviousDisabled">Previous</button>
-            <span>Page @CurrentPage of @MaxPages</span>
-            <button @onclick="NextPage" class="p-2 bg-blue-500 text-white rounded-md" disabled="@IsNextDisabled">Next</button>
+            <button @onclick="PreviousPage" class="p-2 text-gray-500 hover:text-gray-700" disabled="@IsPreviousDisabled">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <span class="px-6 py-5 text-xs font-medium text-gray-500 tracking-wider text-center">Page @CurrentPage of @MaxPages</span>
+            <button @onclick="NextPage" class="p-2 text-gray-500 hover:text-gray-700" disabled="@IsNextDisabled">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
         </div>
     </div>
 }
@@ -40,7 +48,7 @@ else
     public string? SearchTerm { get; set; } = string.Empty;
 
     [SupplyParameterFromQuery(Name = "page")]
-    public int CurrentPage { get; set; } = 1;
+    public int? CurrentPage { get; set; } = 1;
 
     [Inject]
     public NavigationManager NavigationManager { get; set; } = null!;
@@ -69,6 +77,14 @@ else
 
     private async Task LoadQuizzes()
     {
+        if (CurrentPage is null or <= 0)
+        {
+            CurrentPage = 1;
+            UpdateQuery();
+            return;
+        }
+            
+        
         var response = await SearchService.SearchQuizAsync(new SearchQuizRequest
         {
             Take = PageSize,

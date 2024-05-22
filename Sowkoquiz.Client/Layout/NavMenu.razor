@@ -1,4 +1,7 @@
-﻿<div class="flex flex-col md:h-screen bg-gray-100 text-gray-800 border-r border-zinc-300 md:w-64">
+﻿@using Sowkoquiz.Providers
+@inject IJSRuntime JsRuntime
+
+<div class="flex flex-col bg-gray-100 text-gray-800 md:border-r md:border-zinc-300 md:w-64">
     <div class="flex items-center justify-between p-4 bg-gray-100 border-b container-fluid space-x-0.5">
         <a class="text-xl font-bold flex items-center" href="/">
             <img src="icon-40.png" alt="Sowkoquiz" class="h-10 w-10 mr-2" />
@@ -10,7 +13,7 @@
             </svg>
         </button>
     </div>
-    <div class="md:flex md:flex-col flex-grow bg-gray-50 @NavMenuCssClass">
+    <div class="md:flex md:flex-col flex-grow bg-gray-100 @NavMenuCssClass">
         <nav class="flex flex-col space-y-1 p-4">
             <NavLink class="flex items-center space-x-2 p-2 rounded-md hover:bg-[#EDF0F2]" href="" Match="NavLinkMatch.All">
                 <img src="icons/homeicon.png" alt="Home" class="h-5 w-5" />
@@ -30,12 +33,28 @@
             </NavLink>
         </nav>
     </div>
+    @if (!IsMobile)
+    {
+        <div class="items-center mb-2 bottom-0">
+            <p class="text-md text-gray-600 text-center bottom-0">
+                <span class="text-xs font-medium text-gray-500 tracking-wider">v</span><span class="text-xs font-medium text-gray-500 tracking-wider">@VersionProvider.Version</span>
+            </p>
+        </div>
+    }
 </div>
 
 @code {
     private bool collapseNavMenu = false;
 
     private string? NavMenuCssClass => collapseNavMenu ? "hidden" : null;
+    public bool IsMobile { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        IsMobile = await JsRuntime.InvokeAsync<bool>("isDevice");
+    }
+
+    [Inject] public VersionProvider VersionProvider { get; set; } = default!;
 
     private void ToggleNavMenu()
     {
